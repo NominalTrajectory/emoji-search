@@ -1,4 +1,3 @@
-
 # Step 1. Making an image from node.js runtime 
 FROM node:12-alpine as build-step
 
