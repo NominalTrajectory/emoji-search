@@ -17,12 +17,27 @@ RUN npm install
 # Copy the rest of the application files into work directory
 COPY . /app
 
-# Build a react app, it will execute react-scripts build
+# Build the app static assets
 RUN npm run build
 
 
 # Stage 2 From image with Nginx webserver to run the application distribution files
-FROM nginx:1.19.4-alpine
+FROM nginx:stable-alpine
 
-# Copy the output files from stage 1 into nginx folder with html files
-COPY --from=build-step /app/build /usr/share/nginx/html
+# Set working direcotry to nginx asset directory
+WORKDIR /usr/share/nginx/html
+
+# Remove all default nginx static assets
+RUN rm -rf ./*
+
+# Copy the asset files from stage 1 into nginx asset directory
+COPY --from=build-step /app/build .
+
+# Copy nginx server configuration
+COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
+
+# Expose port 80
+EXPOSE 80
+
+# Containers run nginx with global directives and daemon off
+CMD ["nginx", "-g", "daemon off;"]
