@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: nominaltrajectoryemojisearch 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nominaltrajectoryemojisearch
+  template:
+    metadata:
+      labels:
+        app: nominaltrajectoryemojisearch 
+    spec:
+      containers:
+        - name: nominaltrajectoryemojisearch 
+          image: demotheo.azurecr.io/nominaltrajectoryemojisearch
+          ports:
+          - containerPort: 80
